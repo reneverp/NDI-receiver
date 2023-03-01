@@ -3,12 +3,15 @@
 #
 cmake_minimum_required (VERSION 3.8)
 
-project ("BasicCmakeSetup")
+project ("NDIReceiver")
 
-add_subdirectory("src")
+set(NDI-LIBS "Processing.NDI.Lib.x64.lib")
+set(NDI-INCLUDES "C:/Program Files/NDI/NDI 5 SDK/Include")
+set(NDI-BIN "C:/Program Files/NDI/NDI 5 SDK/Bin/X64")
+set(NDI-DLL "Processing.NDI.Lib.x64.dll")
+link_directories("C:/Program Files/NDI/NDI 5 SDK/Lib/x64")
 
-if (CMAKE_VERSION VERSION_GREATER 3.12)
-  set_property(TARGET BasicCmakeSetup PROPERTY CXX_STANDARD 20)
-endif() 
+add_subdirectory("core") 
+add_subdirectory("tools")
 
 # TODO: Add tests and install targets if needed.

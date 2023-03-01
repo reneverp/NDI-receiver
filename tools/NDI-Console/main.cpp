@@ -1,12 +1,21 @@
 ﻿// BasicCmakeSetup.cpp : Defines the entry point for the application.
 //
 
-#include "BasicCmakeSetup.h"
+#include <iostream>
+
+#include "Receiver.h"
 
 using namespace std;
+using namespace NDIReceiver;
 
 int main()
 {
-	cout << "Hello CMake." << endl;
+
+	Receiver r;
+
+	r.start();
+
+	getchar();
+
 	return 0;
 }
