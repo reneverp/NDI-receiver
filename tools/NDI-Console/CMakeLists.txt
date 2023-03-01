@@ -18,7 +18,7 @@ target_link_libraries(NDI-console NDIReceiver-lib ${NDI-LIBS})
 add_custom_command(TARGET NDI-console POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy
 		"${NDI-BIN}/${NDI-DLL}"
-		"${CMAKE_BINARY_DIR}/tools/NDI-console/${NDI-DLL}"
+		"${CMAKE_CURRENT_BINARY_DIR}/${NDI-DLL}"
 )
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
