@@ -5,6 +5,12 @@ cmake_minimum_required (VERSION 3.8)
 
 project ("NDIReceiver")
 
+# Output directory for libraries in Debug configuration
+ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR}/${OUTPUT_DEBUG})
+ # Output directory for libraries in Release configuration
+ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/${OUTPUT_REL})
+
+
 # Add source to this project's executable.
 add_executable (NDI-console "main.cpp")
 target_link_libraries(NDI-console NDIReceiver-lib ${NDI-LIBS})
@@ -12,7 +18,7 @@ target_link_libraries(NDI-console NDIReceiver-lib ${NDI-LIBS})
 add_custom_command(TARGET NDI-console POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy
 		"${NDI-BIN}/${NDI-DLL}"
-		"${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${NDI-DLL}"
+		"${CMAKE_BINARY_DIR}/tools/NDI-console/${NDI-DLL}"
 )
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
