@@ -26,17 +26,17 @@ int main()
 
 		auto start = std::chrono::system_clock::now();
 
-		for (int i = 0; i < 1000; i++)
+		for (int i = 0; i < 250; i++)
 		{
 			auto frame = con.recv();
-			//if (frame) {
-
-			//}
+			/*if (frame) {
+				std::cout << frame->xres << std::endl;
+			}*/
 		}
 
 		auto end = std::chrono::system_clock::now();
 
-		std::cout << 1000 / std::chrono::duration_cast<std::chrono::duration<float>>(end - start).count() << std::endl;
+		std::cout << 250 / std::chrono::duration_cast<std::chrono::duration<float>>(end - start).count() << std::endl;
 
 		con.close();
 	}

@@ -45,6 +45,9 @@ std::shared_ptr<NdiFrame> NdiConnection::recv()
 		// Video data
 	case NDIlib_frame_type_video:
 
+		if (!buffer.initialized()) buffer.init(10, video_frame.data_size_in_bytes);
+		auto slot = buffer.getSlot();
+
 		frame = std::make_shared<NdiFrame>(
 			video_frame.xres,
 			video_frame.yres,
@@ -55,13 +58,11 @@ std::shared_ptr<NdiFrame> NdiConnection::recv()
 			video_frame.line_stride_in_bytes,
 			video_frame.data_size_in_bytes,
 			video_frame.p_metadata,
-			video_frame.timestamp
+			video_frame.timestamp,
+			slot
 		);
 
-		if (buf.capacity() < frame->data_size_in_bytes) buf.reserve(frame->data_size_in_bytes);
-		//frame->p_data.reserve(frame->data_size_in_bytes);
-		memcpy(buf.data(), video_frame.p_data, frame->data_size_in_bytes);
-
+		memcpy(frame->p_data->buffer.data(), video_frame.p_data, frame->data_size_in_bytes);
 
 		NDIlib_recv_free_video_v2(reinterpret_cast<NDIlib_recv_instance_t>(connection), &video_frame);
 		break;

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <FrameBuffer.h>
+
 #include <cstdint>
 #include <vector>
 
@@ -40,7 +42,11 @@ namespace NDIReceiver {
 		int64_t timestamp; // Present in >= v2.5
 
 		// The video data itself.
-		std::vector<uint8_t> p_data;
+		FrameBuffer::Slot* p_data;
+
+		~NdiFrame() { 
+			p_data->locked = false; 
+		}
 	};
 
 

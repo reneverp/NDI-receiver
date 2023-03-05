@@ -2,6 +2,7 @@
 
 #include "source.h"
 #include "frame.h"
+#include "FrameBuffer.h"
 
 #include <memory>
 
@@ -30,7 +31,7 @@ namespace NDIReceiver {
 		const NdiSource source;
 		void* connection;
 
-		std::vector<uint8_t> buf;
+		FrameBuffer buffer;
 
 	};
 
