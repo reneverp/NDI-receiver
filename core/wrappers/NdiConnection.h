@@ -6,6 +6,10 @@
 
 #include <memory>
 
+namespace cv {
+	class Mat;
+}
+
 namespace NDIReceiver {
 
 	class NdiConnection {
@@ -25,6 +29,8 @@ namespace NDIReceiver {
 
 		State						state			();
 
+		NdiConnection(NdiConnection&)					= delete;
+		NdiConnection& operator=(NdiConnection const&)	= delete;
 
 	private:
 		State currentState;
@@ -32,6 +38,9 @@ namespace NDIReceiver {
 		void* connection;
 
 		FrameBuffer buffer;
+
+		std::unique_ptr<cv::Mat> matUYVY;
+		std::unique_ptr<cv::Mat> matRGB;
 
 	};
 

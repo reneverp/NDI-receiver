@@ -31,19 +31,13 @@ int main()
 
 		ReceiverAsync asyncReceiver(mainthread, con);
 
-		//auto start = std::chrono::system_clock::now();
-
-		cv::Mat f(720, 1280, CV_8UC2);
-		cv::Mat bgrFrame(720, 1280, CV_8UC3);
-
-
 		asyncReceiver.eventImage = [&](std::shared_ptr<NdiFrame> frame) {
 			if (frame) {
 
-				f.data = frame->p_data->buffer.data();
-				cv::cvtColor(f, bgrFrame, cv::COLOR_YUV2BGR_UYVY, 0);
+				cv::Mat f(cv::Size(frame->xres, frame->yres), CV_8UC4, frame->data());
 
-				cv::imshow("test", bgrFrame);
+				//Looks odd, showing RGBA in BGRA, no need to convert though
+				cv::imshow("test", f);
 
 				cv::waitKey(1);
 			}
@@ -53,11 +47,6 @@ int main()
 
 
 		asyncReceiver.recvAsync();
-
-
-		//auto end = std::chrono::system_clock::now();
-
-		//std::cout << 250 / std::chrono::duration_cast<std::chrono::duration<float>>(end - start).count() << std::endl;
 
 		getchar();
 

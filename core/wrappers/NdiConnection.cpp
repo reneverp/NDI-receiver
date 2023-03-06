@@ -3,7 +3,6 @@
 #include <Processing.NDI.Lib.h>
 
 #include <opencv2/imgproc.hpp>
-#include <opencv2/highgui/highgui.hpp>
 
 using namespace NDIReceiver;
 
@@ -47,8 +46,15 @@ std::shared_ptr<NdiFrame> NdiConnection::recv()
 		// Video data
 	case NDIlib_frame_type_video:
 
-		if (!buffer.initialized()) buffer.init(10, video_frame.xres * video_frame.yres * 2);
-		auto slot = buffer.getSlot();
+		//receive 4:2:2 YUV frame, return RGBA;
+
+		auto rgbFrameSizeBytes = video_frame.xres * video_frame.yres * 4;
+
+		if (!buffer.initialized()) buffer.init(10, rgbFrameSizeBytes);
+
+		if (!matUYVY) matUYVY = std::make_unique<cv::Mat>(cv::Size(video_frame.xres, video_frame.yres), CV_8UC2);
+		if (!matRGB ) matRGB  = std::make_unique<cv::Mat>(cv::Size(video_frame.xres, video_frame.yres), CV_8UC4);
+
 
 		frame = std::make_shared<NdiFrame>(
 			video_frame.xres,
@@ -57,14 +63,16 @@ std::shared_ptr<NdiFrame> NdiConnection::recv()
 			video_frame.frame_rate_D,
 			video_frame.picture_aspect_ratio,
 			video_frame.timecode,
-			video_frame.line_stride_in_bytes,
-			video_frame.data_size_in_bytes,
+			rgbFrameSizeBytes,
 			video_frame.p_metadata,
 			video_frame.timestamp,
-			slot
+			buffer.getSlot()
 		);
 
-		memcpy(frame->p_data->buffer.data(), video_frame.p_data, video_frame.xres * video_frame.yres * 2);
+		matUYVY->data = video_frame.p_data;
+		cv::cvtColor(*matUYVY, *matRGB, cv::COLOR_YUV2RGBA_UYVY);
+
+		memcpy(frame->data(), matRGB->data, rgbFrameSizeBytes);
 
 		NDIlib_recv_free_video_v2(reinterpret_cast<NDIlib_recv_instance_t>(connection), &video_frame);
 		break;
