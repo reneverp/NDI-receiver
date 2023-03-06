@@ -11,9 +11,9 @@ namespace NDIReceiver {
     {
     public:
                                 NdiSourceFinder();
-        virtual                    ~NdiSourceFinder();
+        virtual                 ~NdiSourceFinder();
 
-        std::vector<NdiSource>    findSources();
+        std::vector<NdiSource>  findSources();
 
 
     };
