@@ -9,11 +9,11 @@ project ("NDIReceiver")
  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR}/${OUTPUT_DEBUG})
  # Output directory for libraries in Release configuration
  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/${OUTPUT_REL})
-
+  
 
 # Add source to this project's executable.
-add_executable (NDI-console "main.cpp")
-target_link_libraries(NDI-console NDIReceiver-lib ${NDI-LIBS})
+add_executable (NDI-console "main.cpp" "ReceiverAsync.cpp" "ReceiverAsync.h")
+target_link_libraries(NDI-console NDIReceiver-lib ${CONAN_LIBS} ${NDI-LIBS})
 
 add_custom_command(TARGET NDI-console POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy

@@ -7,12 +7,18 @@
 #include "NdiConnection.h"
 
 #include <chrono>
+#include <opencv2/imgproc.hpp>
+#include <opencv2/highgui/highgui.hpp>
+
+#include "Thread.h"
+#include "ReceiverAsync.h"
 
 using namespace std;
 using namespace NDIReceiver;
 
 int main()
 {
+	Thread mainthread;
 	NdiSourceFinder finder;
 
 	std::cout << "waiting for sources" << std::endl;
@@ -21,27 +27,46 @@ int main()
 	if (sources.size() > 0)
 	{
 		NdiConnection con(sources[0]);
-
 		con.open();
 
-		auto start = std::chrono::system_clock::now();
+		ReceiverAsync asyncReceiver(mainthread, con);
 
-		for (int i = 0; i < 250; i++)
-		{
-			auto frame = con.recv();
-			/*if (frame) {
-				std::cout << frame->xres << std::endl;
-			}*/
-		}
+		//auto start = std::chrono::system_clock::now();
 
-		auto end = std::chrono::system_clock::now();
+		cv::Mat f(720, 1280, CV_8UC2);
+		cv::Mat bgrFrame(720, 1280, CV_8UC3);
 
-		std::cout << 250 / std::chrono::duration_cast<std::chrono::duration<float>>(end - start).count() << std::endl;
+
+		asyncReceiver.eventImage = [&](std::shared_ptr<NdiFrame> frame) {
+			if (frame) {
+
+				f.data = frame->p_data->buffer.data();
+				cv::cvtColor(f, bgrFrame, cv::COLOR_YUV2BGR_UYVY, 0);
+
+				cv::imshow("test", bgrFrame);
+
+				cv::waitKey(1);
+			}
+
+			asyncReceiver.recvAsync();
+		};
+
+
+		asyncReceiver.recvAsync();
+
+
+		//auto end = std::chrono::system_clock::now();
+
+		//std::cout << 250 / std::chrono::duration_cast<std::chrono::duration<float>>(end - start).count() << std::endl;
+
+		getchar();
+
+		asyncReceiver.stop();
+		mainthread.stop();
 
 		con.close();
+
 	}
-	
-	getchar();
 
 	return 0;
 }

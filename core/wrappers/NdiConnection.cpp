@@ -2,6 +2,8 @@
 
 #include <Processing.NDI.Lib.h>
 
+#include <opencv2/imgproc.hpp>
+#include <opencv2/highgui/highgui.hpp>
 
 using namespace NDIReceiver;
 
@@ -45,7 +47,7 @@ std::shared_ptr<NdiFrame> NdiConnection::recv()
 		// Video data
 	case NDIlib_frame_type_video:
 
-		if (!buffer.initialized()) buffer.init(10, video_frame.data_size_in_bytes);
+		if (!buffer.initialized()) buffer.init(10, video_frame.xres * video_frame.yres * 2);
 		auto slot = buffer.getSlot();
 
 		frame = std::make_shared<NdiFrame>(
@@ -62,7 +64,7 @@ std::shared_ptr<NdiFrame> NdiConnection::recv()
 			slot
 		);
 
-		memcpy(frame->p_data->buffer.data(), video_frame.p_data, frame->data_size_in_bytes);
+		memcpy(frame->p_data->buffer.data(), video_frame.p_data, video_frame.xres * video_frame.yres * 2);
 
 		NDIlib_recv_free_video_v2(reinterpret_cast<NDIlib_recv_instance_t>(connection), &video_frame);
 		break;

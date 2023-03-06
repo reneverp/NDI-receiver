@@ -3,6 +3,8 @@
 #include <vector>
 #include <queue>
 
+#include <cstdint>
+
 namespace NDIReceiver
 {
 	class FrameBuffer
