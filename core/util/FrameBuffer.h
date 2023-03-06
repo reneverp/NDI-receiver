@@ -7,39 +7,39 @@
 
 namespace NDIReceiver
 {
-	class FrameBuffer
-	{
-	public:
-		class Slot {
-		public:
-			Slot(size_t size, bool locked) : buffer(size), locked(locked) {};
-			~Slot() {};
+    class FrameBuffer
+    {
+    public:
+        class Slot {
+        public:
+            Slot(size_t size, bool locked) : buffer(size), locked(locked) {};
+            ~Slot() {};
 
-			Slot(Slot&)						= delete;
-			Slot& operator=(Slot const&)	= delete;
+            Slot(Slot&)                     = delete;
+            Slot& operator=(Slot const&)    = delete;
 
-			Slot(Slot&&)					= default;
-			Slot& operator=(Slot&&)			= default;
+            Slot(Slot&&)                    = default;
+            Slot& operator=(Slot&&)         = default;
 
-			std::vector<uint8_t>	buffer;
-			bool					locked;
+            std::vector<uint8_t>    buffer;
+            bool                    locked;
 
-		private:
+        private:
 
-		};
+        };
 
-				FrameBuffer			();
-		virtual ~FrameBuffer		();
+                FrameBuffer         ();
+        virtual ~FrameBuffer        ();
 
-		//TODO
-		void	init				(int count, int frameSize);
-		bool	initialized			();
+        //TODO
+        void    init                (int count, int frameSize);
+        bool    initialized         ();
 
-		Slot&	getSlot				();
+        Slot&    getSlot            ();
 
-	private:
-		std::vector<Slot>			buffer;
-		bool						valid;
-	};
+    private:
+        std::vector<Slot>           buffer;
+        bool                        valid;
+    };
 
 };

@@ -7,41 +7,41 @@
 #include <memory>
 
 namespace cv {
-	class Mat;
+    class Mat;
 }
 
 namespace NDIReceiver {
 
-	class NdiConnection {
+    class NdiConnection {
 
-	public:
-		enum class State {
-			Valid,
-			Invalid
-		};
+    public:
+        enum class State {
+            Valid,
+            Invalid
+        };
 
-									NdiConnection	(const NdiSource& source);
-		virtual						~NdiConnection	();
+                                    NdiConnection    (const NdiSource& source);
+        virtual                        ~NdiConnection    ();
 
-		void						open			();
-		std::shared_ptr<NdiFrame>	recv			();
-		void						close			();
+        void                        open            ();
+        std::shared_ptr<NdiFrame>    recv            ();
+        void                        close            ();
 
-		State						state			();
+        State                        state            ();
 
-		NdiConnection(NdiConnection&)					= delete;
-		NdiConnection& operator=(NdiConnection const&)	= delete;
+        NdiConnection(NdiConnection&)                    = delete;
+        NdiConnection& operator=(NdiConnection const&)    = delete;
 
-	private:
-		State currentState;
-		const NdiSource source;
-		void* connection;
+    private:
+        State currentState;
+        const NdiSource source;
+        void* connection;
 
-		FrameBuffer buffer;
+        FrameBuffer buffer;
 
-		std::unique_ptr<cv::Mat> matUYVY;
-		std::unique_ptr<cv::Mat> matRGB;
+        std::unique_ptr<cv::Mat> matUYVY;
+        std::unique_ptr<cv::Mat> matRGB;
 
-	};
+    };
 
 };

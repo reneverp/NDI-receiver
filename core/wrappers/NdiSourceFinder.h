@@ -7,16 +7,16 @@
 
 namespace NDIReceiver {
 
-	class NdiSourceFinder
-	{
-	public:
-								NdiSourceFinder();
-		virtual					~NdiSourceFinder();
+    class NdiSourceFinder
+    {
+    public:
+                                NdiSourceFinder();
+        virtual                    ~NdiSourceFinder();
 
-		std::vector<NdiSource>	findSources();
+        std::vector<NdiSource>    findSources();
 
 
-	};
+    };
 
 
 };

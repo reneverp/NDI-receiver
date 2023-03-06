@@ -18,44 +18,44 @@ using namespace NDIReceiver;
 
 int main()
 {
-	Thread mainthread;
-	NdiSourceFinder finder;
+    Thread mainthread;
+    NdiSourceFinder finder;
 
-	std::cout << "waiting for sources" << std::endl;
-	auto sources = finder.findSources();
+    std::cout << "waiting for sources" << std::endl;
+    auto sources = finder.findSources();
 
-	if (sources.size() > 0)
-	{
-		NdiConnection con(sources[0]);
-		con.open();
+    if (sources.size() > 0)
+    {
+        NdiConnection con(sources[0]);
+        con.open();
 
-		ReceiverAsync asyncReceiver(mainthread, con);
+        ReceiverAsync asyncReceiver(mainthread, con);
 
-		asyncReceiver.eventImage = [&](std::shared_ptr<NdiFrame> frame) {
-			if (frame) {
+        asyncReceiver.eventImage = [&](std::shared_ptr<NdiFrame> frame) {
+            if (frame) {
 
-				cv::Mat f(cv::Size(frame->xres, frame->yres), CV_8UC4, frame->data());
+                cv::Mat f(cv::Size(frame->xres, frame->yres), CV_8UC4, frame->data());
 
-				//Looks odd, showing RGBA in BGRA, no need to convert though
-				cv::imshow("test", f);
+                //Looks odd, showing RGBA in BGRA, no need to convert though
+                cv::imshow("test", f);
 
-				cv::waitKey(1);
-			}
+                cv::waitKey(1);
+            }
 
-			asyncReceiver.recvAsync();
-		};
+            asyncReceiver.recvAsync();
+        };
 
 
-		asyncReceiver.recvAsync();
+        asyncReceiver.recvAsync();
 
-		getchar();
+        getchar();
 
-		asyncReceiver.stop();
-		mainthread.stop();
+        asyncReceiver.stop();
+        mainthread.stop();
 
-		con.close();
+        con.close();
 
-	}
+    }
 
-	return 0;
+    return 0;
 }
