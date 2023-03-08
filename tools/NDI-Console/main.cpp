@@ -44,14 +44,13 @@ int main()
 
                 frameCount++;
 
-                auto slotsInUse = con.buffer.slotsLocked();
-                if (slotsInUse > 1) {
-                    std::cout << "More than 1 buffer slot in use:" << con.buffer.slotsLocked() << std::endl;
-                }
-
                 if (frameCount == 1)
                 {
                     std::cout << (double)frame->frame_rate_N / (double)frame->frame_rate_D << "fps" << std::endl;
+                }
+
+                if (con.buffer.slotsLocked() > 1) {
+                    std::cout << "More than 1 buffer slot in use:" << con.buffer.slotsLocked() << std::endl;
                 }
 
                 if (frameCount % 100 == 0)
