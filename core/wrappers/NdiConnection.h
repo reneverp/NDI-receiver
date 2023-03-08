@@ -32,12 +32,14 @@ namespace NDIReceiver {
         NdiConnection(NdiConnection&)                   = delete;
         NdiConnection& operator=(NdiConnection const&)  = delete;
 
+        FrameBuffer                 buffer;
+
+
     private:
         State                       currentState;
         const NdiSource             source;
         void*                       connection;
 
-        FrameBuffer                 buffer;
 
         std::unique_ptr<cv::Mat>    matUYVY;
         std::unique_ptr<cv::Mat>    matRGB;

@@ -15,21 +15,20 @@ NdiSourceFinder::~NdiSourceFinder()
 {
 }
 
-std::vector<NdiSource> NdiSourceFinder::findSources()
+std::vector<NdiSource> NdiSourceFinder::findSources(int timeout)
 {
     std::vector<NdiSource> sources;
 
-
-    auto ndiFinder = NDIlib_find_create_v2();
+    NDIlib_find_create_t t(false, nullptr, "192.168.100.100");
+    auto ndiFinder = NDIlib_find_create_v2(&t);
 
 
     // Wait until there is one source
     uint32_t srcCount = 0;
     const NDIlib_source_t* p_sources;
-    while (!srcCount) {
-        NDIlib_find_wait_for_sources(ndiFinder, 1000);
-        p_sources = NDIlib_find_get_current_sources(ndiFinder, &srcCount);
-    }
+
+    NDIlib_find_wait_for_sources(ndiFinder, timeout);
+    p_sources = NDIlib_find_get_current_sources(ndiFinder, &srcCount);
 
     for (uint32_t i = 0; i < srcCount; i++)
     {

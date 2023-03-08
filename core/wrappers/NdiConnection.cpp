@@ -36,11 +36,23 @@ std::shared_ptr<NdiFrame> NdiConnection::recv()
     // only interested in video frames
     NDIlib_video_frame_v2_t video_frame;
 
-    switch (NDIlib_recv_capture_v3(reinterpret_cast<NDIlib_recv_instance_t>(connection), &video_frame, nullptr, nullptr, 5000)) {
+    auto s = NDIlib_recv_capture_v3(reinterpret_cast<NDIlib_recv_instance_t>(connection), &video_frame, nullptr, nullptr, 1000);
+
+    switch (s) {
         // No data
     case NDIlib_frame_type_none:
         break;
+
     case NDIlib_frame_type_audio:
+        break;
+
+    case NDIlib_frame_type_metadata:
+        break;
+
+    case NDIlib_frame_type_error:
+        break;
+
+    case NDIlib_frame_type_status_change:
         break;
 
         // Video data
@@ -69,10 +81,10 @@ std::shared_ptr<NdiFrame> NdiConnection::recv()
             buffer.getSlot()
         );
 
-        matUYVY->data = video_frame.p_data;
-        cv::cvtColor(*matUYVY, *matRGB, cv::COLOR_YUV2RGBA_UYVY);
+        matUYVY ->data = video_frame.p_data;
+        matRGB  ->data = frame->data();
 
-        memcpy(frame->data(), matRGB->data, rgbFrameSizeBytes);
+        cv::cvtColor(*matUYVY, *matRGB, cv::COLOR_YUV2BGRA_UYVY);
 
         NDIlib_recv_free_video_v2(reinterpret_cast<NDIlib_recv_instance_t>(connection), &video_frame);
         break;
@@ -91,6 +103,8 @@ void NdiConnection::close()
     
     connection        = nullptr;
     currentState    = NdiConnection::State::Invalid;
+
+    NDIlib_destroy();
 }
 
 NdiConnection::State NdiConnection::state()

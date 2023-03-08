@@ -18,12 +18,11 @@ void ReceiverAsync::recvAsync()
 
         auto frame = connection.recv();
         
-        if (frame)
-        {
-            mainThread.executeAsync([this, frame] {
-                if (eventImage) eventImage(frame);
-            });
-        }
+
+        mainThread.executeAsync([this, frame] {
+            if (eventImage) eventImage(frame);
+        });
+
 
     });
 }

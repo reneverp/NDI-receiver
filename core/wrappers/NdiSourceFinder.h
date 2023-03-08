@@ -13,7 +13,7 @@ namespace NDIReceiver {
                                 NdiSourceFinder();
         virtual                 ~NdiSourceFinder();
 
-        std::vector<NdiSource>  findSources();
+        std::vector<NdiSource>  findSources(int timeout);
 
 
     };

@@ -50,3 +50,15 @@ FrameBuffer::Slot& FrameBuffer::getSlot()
         return getSlot();
     }
 }
+
+int FrameBuffer::slotsLocked()
+{
+    for (int i = 0; i < buffer.size(); i++)
+    {
+        if (!buffer[i].locked) return i;
+    }
+}
+
+int FrameBuffer::size() {
+    return buffer.size();
+}

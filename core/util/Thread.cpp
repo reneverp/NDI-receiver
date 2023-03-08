@@ -28,7 +28,9 @@ void Thread::threadFunc()
         std::unique_lock<std::mutex> lock(mutex);
         if (messages.empty())
         {
-            condition.wait(lock, [this] {return !messages.empty(); });
+            condition.wait(lock);
+
+            if (stopped) return;
         }
 
         auto message = std::move(messages.front());

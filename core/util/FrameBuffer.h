@@ -35,7 +35,10 @@ namespace NDIReceiver
         void    init                (int count, int frameSize);
         bool    initialized         ();
 
-        Slot&    getSlot            ();
+        Slot&   getSlot             ();
+
+        int     slotsLocked         ();
+        int     size                ();
 
     private:
         std::vector<Slot>           buffer;
