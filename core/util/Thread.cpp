@@ -2,9 +2,9 @@
 
 using namespace NDIReceiver;
 
-Thread::Thread() :
-stopped     (false),
-worker      ([this] { threadFunc(); })
+Thread::Thread():
+    stopped     (false),
+    worker      ([this] { threadFunc(); })
 {
 }
 
@@ -15,17 +15,17 @@ Thread::~Thread()
 
 void Thread::executeAsync(std::function<void()> func)
 {
-    std::unique_lock lock(mutex);
-    messages.push(std::move(func));
+    auto lock = std::unique_lock{mutex};
+
+    messages .push(std::move(func));
     condition.notify_one();
 }
 
 void Thread::threadFunc()
 {
-    
     while(!stopped.load())
     {
-        std::unique_lock<std::mutex> lock(mutex);
+        auto lock = std::unique_lock<std::mutex>{mutex};
         if (messages.empty())
         {
             condition.wait(lock);
@@ -43,7 +43,7 @@ void Thread::threadFunc()
 
 void Thread::stop()
 {
-    stopped.store(true);
+    stopped  .store(true);
     condition.notify_one();
-    worker.join();
+    worker   .join();
 }

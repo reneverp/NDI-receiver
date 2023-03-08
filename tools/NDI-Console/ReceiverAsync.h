@@ -5,24 +5,24 @@
 
 #include "NdiConnection.h"
 
-namespace NDIReceiver {
-    class ReceiverAsync {
-    public:
-        ReceiverAsync(Thread &mainThread, NdiConnection &ndiConnection);
-        virtual ~ReceiverAsync();
+namespace NDIReceiver 
+{
 
-        void recvAsync();
-        void stop();
+class ReceiverAsync 
+{
+public:
+    ReceiverAsync(Thread& threadMain, NdiConnection& ndiConnection);
+    virtual ~ReceiverAsync() = default;
 
-        std::function<void(std::shared_ptr<NdiFrame>)> eventImage;
+    void recvAsync();
+    void stop();
 
-    private:
-        NdiConnection &connection;
+    std::function<void(std::shared_ptr<NdiFrame>)> eventImage;
 
-        Thread background;
-        Thread &mainThread;
-
-
-    };
-
+private:
+    NdiConnection&  connection;
+    Thread&         threadMain;
+    Thread          threadBackground;
 };
+
+} // namespace

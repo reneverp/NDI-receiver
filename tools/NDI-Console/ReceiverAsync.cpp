@@ -2,32 +2,30 @@
 
 using namespace NDIReceiver;
 
-ReceiverAsync::ReceiverAsync(Thread& mainThread, NdiConnection &con) :
-    mainThread(mainThread),
-    connection(con)
-{
-}
-
-ReceiverAsync::~ReceiverAsync()
+ReceiverAsync::ReceiverAsync
+(
+    Thread&         threadMain, 
+    NdiConnection&  connection
+):
+    threadMain      (threadMain),
+    connection      (connection)
 {
 }
 
 void ReceiverAsync::recvAsync()
 {
-    background.executeAsync([this] {
-
+    threadBackground.executeAsync([this] 
+    {
         auto frame = connection.recv();
-        
 
-        mainThread.executeAsync([this, frame] {
+        threadMain.executeAsync([this, frame] 
+        {
             if (eventImage) eventImage(frame);
         });
-
-
     });
 }
 
 void ReceiverAsync::stop()
 {
-    background.stop();
+    threadBackground.stop();
 }

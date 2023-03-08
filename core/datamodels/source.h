@@ -2,12 +2,13 @@
 
 #include <string>
 
-namespace NDIReceiver {
+namespace NDIReceiver 
+{
 
-	struct NdiSource {
-		std::string name;
-		std::string url;
-	};
-
-
+struct NdiSource 
+{
+	std::string name;
+	std::string url;
 };
+
+} // namespace
