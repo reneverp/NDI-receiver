@@ -20,12 +20,12 @@ public:
         std::vector<uint8_t>    buffer;
         bool                    locked;
 
+        Slot(Slot&&)                    = default;
+        Slot& operator=(Slot&&)         = default;
+
     private:
         Slot(Slot&)                     = delete;
         Slot& operator=(Slot const&)    = delete;
-
-        Slot(Slot&&)                    = default;
-        Slot& operator=(Slot&&)         = default;
     };
 
     FrameBuffer ();
