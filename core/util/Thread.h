@@ -7,31 +7,26 @@
 
 namespace NDIReceiver
 {
-    class Thread
-    {
-    public:
-                Thread          ();
-        virtual ~Thread         ();
 
-        void    executeAsync    (std::function<void()> func);
-        void    stop            ();
+class Thread
+{
+public:
+            Thread          ();
+    virtual ~Thread         ();
 
-
-    private:
-        void    threadFunc();
-
-        std::thread                             worker;
-        std::condition_variable                 condition;
-        std::mutex                              mutex;
-        std::atomic<bool>                       stopped;
-
-        std::queue<std::function<void()>>       messages;
+    void    executeAsync    (std::function<void()> func);
+    void    stop            ();
 
 
-    };
+private:
+    void    threadFunc();
 
+    std::thread                             worker;
+    std::condition_variable                 condition;
+    std::mutex                              mutex;
+    std::atomic<bool>                       stopped;
 
-
-
+    std::queue<std::function<void()>>       messages;
+};
 
 }

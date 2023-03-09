@@ -1,22 +1,20 @@
 #pragma once
 
+#include "source.h"
+
 #include <string>
 #include <vector>
 
-#include "source.h"
+namespace NDIReceiver 
+{
 
-namespace NDIReceiver {
+class NdiSourceFinder
+{
+public:
+    NdiSourceFinder();
+    virtual ~NdiSourceFinder() = default;
 
-    class NdiSourceFinder
-    {
-    public:
-                                NdiSourceFinder();
-        virtual                 ~NdiSourceFinder();
-
-        std::vector<NdiSource>  findSources(int timeout);
-
-
-    };
-
-
+    std::vector<NdiSource> findSources(int timeout);
 };
+
+} // namespace
