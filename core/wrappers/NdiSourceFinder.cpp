@@ -14,8 +14,9 @@ std::vector<NdiSource> NdiSourceFinder::findSources(int timeout)
 {
     auto sources = std::vector<NdiSource>{};
 
-    //NDIlib_find_create_t t(false, nullptr, "192.168.100.100");
-    auto ndiFinder = NDIlib_find_create_v2(/*&t*/);
+    NDIlib_find_create_t t(true, nullptr, "192.168.100.100");
+    auto ndiFinder = NDIlib_find_create_v2(&t);
+
 
     // Wait until there is one source
     uint32_t srcCount = 0;
