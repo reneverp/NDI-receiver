@@ -19,7 +19,7 @@ std::vector<NdiSource> NdiSourceFinder::findSources(int timeout)
 {
     std::vector<NdiSource> sources;
 
-    NDIlib_find_create_t t(false, nullptr, "192.168.100.100");
+    NDIlib_find_create_t t(true, nullptr, "192.168.100.100");
     auto ndiFinder = NDIlib_find_create_v2(&t);
 
 

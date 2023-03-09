@@ -5,6 +5,9 @@ cmake_minimum_required (VERSION 3.8)
 
 project ("NDIReceiver")
 
+set(CMAKE_CXX_FLAGS_RELEASE "/MT")
+set(CMAKE_CXX_FLAGS_DEBUG "/MTd")
+
 set(NDI-LIBS "Processing.NDI.Lib.x64.lib")
 set(NDI-INCLUDES "C:/Program Files/NDI/NDI 5 SDK/Include")
 set(NDI-BIN "C:/Program Files/NDI/NDI 5 SDK/Bin/X64")

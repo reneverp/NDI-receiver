@@ -62,6 +62,7 @@ std::shared_ptr<NdiFrame> NdiConnection::recv()
 
         auto rgbFrameSizeBytes = video_frame.xres * video_frame.yres * 4;
 
+
         if (!buffer.initialized()) buffer.init(10, rgbFrameSizeBytes);
 
         if (!matUYVY) matUYVY = std::make_unique<cv::Mat>(cv::Size(video_frame.xres, video_frame.yres), CV_8UC2);
