@@ -41,10 +41,10 @@ private:
     std::unique_ptr<cv::Mat>    matRGB;
 
 private:
-    NdiConnection             (NdiConnection const&)	= delete;
-    NdiConnection& operator=  (NdiConnection const&)	= delete;
-    NdiConnection             (NdiConnection&&)	        = delete;
-    NdiConnection& operator=  (NdiConnection&&)	        = delete;
+    NdiConnection             (NdiConnection const&)    = delete;
+    NdiConnection& operator=  (NdiConnection const&)    = delete;
+    NdiConnection             (NdiConnection&&)         = delete;
+    NdiConnection& operator=  (NdiConnection&&)         = delete;
 
 };
 

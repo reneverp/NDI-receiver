@@ -7,8 +7,8 @@ namespace NDIReceiver
 
 struct NdiSource 
 {
-	std::string name;
-	std::string url;
+    std::string name;
+    std::string url;
 };
 
 } // namespace
