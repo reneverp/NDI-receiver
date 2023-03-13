@@ -4,6 +4,7 @@
 #include <functional>
 #include <condition_variable>
 #include <queue>
+#include <atomic>
 
 namespace NDIReceiver
 {

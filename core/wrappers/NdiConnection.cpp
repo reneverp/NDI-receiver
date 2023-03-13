@@ -55,6 +55,10 @@ std::shared_ptr<NdiFrame> NdiConnection::recv()
     case NDIlib_frame_type_status_change:
         break;
 
+
+    case NDIlib_frame_type_max:
+        break;
+
         // Video data
     case NDIlib_frame_type_video:
 

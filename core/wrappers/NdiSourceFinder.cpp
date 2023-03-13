@@ -32,7 +32,9 @@ std::vector<NdiSource> NdiSourceFinder::findSources(int timeout)
 
     for (uint32_t i = 0; i < srcCount; i++)
     {
-        sources.push_back(NdiSource(p_sources[i].p_ndi_name, p_sources[i].p_url_address));
+        NdiSource s{ p_sources[i].p_ndi_name, p_sources[i].p_url_address };
+
+        sources.push_back(s);
     }
 
     NDIlib_find_destroy(ndiFinder);

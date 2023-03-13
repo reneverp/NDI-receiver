@@ -57,8 +57,10 @@ int FrameBuffer::slotsLocked()
     {
         if (!buffer[i].locked) return i;
     }
+
+    return 0;
 }
 
 int FrameBuffer::size() {
-    return buffer.size();
+    return static_cast<int>(buffer.size());
 }

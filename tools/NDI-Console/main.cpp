@@ -16,10 +16,31 @@
 using namespace std;
 using namespace NDIReceiver;
 
-int main()
+int main(int argc, char* argv[])
 {
+    int width = 0;
+    int height = 0;
+    bool writeVideo = false;
+
+    if (argc == 2)
+    {
+        writeVideo = true;
+
+        if (std::string(argv[1]) == "1") width = 1280, height = 1024; else
+        if (std::string(argv[1]) == "2") width = 1600, height = 1200; else
+        if (std::string(argv[1]) == "3") width = 1920, height = 1080; 
+        else
+        {
+            std::cout << "usage: NDI-receiver [mode (for writing video out)] : modes (1 = 1280x1024, 2=1600x1200, 3=1920x1080)" << std::endl;  
+            return -1;
+        }
+
+    }
+
     Thread mainthread;
     NdiSourceFinder finder;
+
+    cv::VideoWriter writer("test.avi", 0, 30, cv::Size(width, height));
 
     std::cout << "waiting for sources" << std::endl;
     auto sources = finder.findSources(5000);
@@ -34,15 +55,22 @@ int main()
 
         uint frameCount = 0;
 
+
         asyncReceiver.eventImage = [&](std::shared_ptr<NdiFrame> frame) {
             if (frame) {
 
                 cv::Mat f(cv::Size(frame->xres, frame->yres), CV_8UC4, frame->data());
-                
+
+                if (writeVideo)
+                {
+                    cv::Mat b(cv::Size(frame->xres, frame->yres), CV_8UC3);
+
+                    cv::cvtColor(f, b, cv::COLOR_BGRA2BGR);
+                    writer.write(b);
+                }
+
                 cv::imshow("test", f);
                 cv::waitKey(1);
-
-                frameCount++;
 
                 if (frameCount == 1)
                 {
@@ -68,8 +96,10 @@ int main()
 
         getchar();
 
+
         asyncReceiver.stop();
         mainthread.stop();
+
 
         con.close();
 

@@ -1,4 +1,5 @@
 #include "Thread.h"
+#include <mutex>
 
 using namespace NDIReceiver;
 
@@ -15,7 +16,7 @@ Thread::~Thread()
 
 void Thread::executeAsync(std::function<void()> func)
 {
-    std::unique_lock lock(mutex);
+    std::unique_lock<std::mutex> lock(mutex);
     messages.push(std::move(func));
     condition.notify_one();
 }
