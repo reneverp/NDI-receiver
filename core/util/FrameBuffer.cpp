@@ -2,20 +2,12 @@
 
 using namespace NDIReceiver;
 
-FrameBuffer::FrameBuffer():
-    valid(false)
-{
-}
+FrameBuffer::FrameBuffer(): valid(false) { }
 
-FrameBuffer::~FrameBuffer()
+void FrameBuffer::init(size_t count, size_t frameSize)
 {
     buffer.clear();
-}
-
-void FrameBuffer::init(int count, int frameSize)
-{
-    buffer.clear();
-    for (int i = 0; i < count; i++)
+    for (size_t i = 0; i < count; i++)
     {
         buffer.push_back(std::move(FrameBuffer::Slot(frameSize, false)));
     }
@@ -31,7 +23,6 @@ bool FrameBuffer::initialized()
 FrameBuffer::Slot& FrameBuffer::getSlot()
 {
     auto is_locked  = [&](FrameBuffer::Slot& slot) { return !slot.locked; };
-    
     auto res        = std::find_if(begin(buffer), end(buffer), is_locked);
 
     if (res != std::end(buffer))
@@ -51,9 +42,9 @@ FrameBuffer::Slot& FrameBuffer::getSlot()
     }
 }
 
-int FrameBuffer::slotsLocked()
+size_t FrameBuffer::slotsLocked()
 {
-    for (int i = 0; i < buffer.size(); i++)
+    for (size_t i = 0; i < buffer.size(); ++i)
     {
         if (!buffer[i].locked) return i;
     }
@@ -61,6 +52,7 @@ int FrameBuffer::slotsLocked()
     return 0;
 }
 
-int FrameBuffer::size() {
-    return static_cast<int>(buffer.size());
+size_t FrameBuffer::size() 
+{
+    return buffer.size();
 }

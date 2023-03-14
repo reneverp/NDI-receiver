@@ -1,19 +1,14 @@
-﻿// BasicCmakeSetup.cpp : Defines the entry point for the application.
-//
+﻿#include "ReceiverAsync.h"
+#include <NdiSourceFinder.h>
+#include <NdiConnection.h>
 
-#include <iostream>
+#include <Thread.h>
 
-#include "NdiSourceFinder.h"
-#include "NdiConnection.h"
-
-#include <chrono>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
-#include "Thread.h"
-#include "ReceiverAsync.h"
+#include <iostream>
 
-using namespace std;
 using namespace NDIReceiver;
 
 int main(int argc, char* argv[])
@@ -43,21 +38,28 @@ int main(int argc, char* argv[])
     cv::VideoWriter writer("test.avi", 0, 30, cv::Size(width, height));
 
     std::cout << "waiting for sources" << std::endl;
-    auto sources = finder.findSources(5000);
+    
+    auto mainthread = Thread{};
+    auto finder     = NdiSourceFinder{};
+    auto sources    = finder.findSources(5000);
 
-    if (sources.size() > 0)
+    if (sources.empty()) 
     {
-        std::cout << "found  source: " << sources[0].name << " " << sources[0].url << std::endl;
-        NdiConnection con(sources[0]);
-        con.open();
+        std::cout << "no sources found within timeout" << std::endl;
+        return 0;
+    }
 
-        ReceiverAsync asyncReceiver(mainthread, con);
+    std::cout << "found source: " << sources[0].name << " " << sources[0].url << std::endl;
 
-        uint frameCount = 0;
+    auto connection = NdiConnection{sources[0]};
+    auto reciever   = ReceiverAsync{mainthread, connection};
 
+    connection.open();
+    uint frameCount = 0;
 
-        asyncReceiver.eventImage = [&](std::shared_ptr<NdiFrame> frame) {
-            if (frame) {
+    reciever.eventImage = [&frameCount, &connection, &reciever](std::shared_ptr<NdiFrame> frame) 
+    {
+        if (!frame) return;
 
                 cv::Mat f(cv::Size(frame->xres, frame->yres), CV_8UC4, frame->data());
 
@@ -88,13 +90,12 @@ int main(int argc, char* argv[])
                 
             }
 
-            asyncReceiver.recvAsync();
-        };
+        reciever.recvAsync();
+    };
 
+    reciever.recvAsync();
 
-        asyncReceiver.recvAsync();
-
-        getchar();
+    getchar();
 
 
         asyncReceiver.stop();

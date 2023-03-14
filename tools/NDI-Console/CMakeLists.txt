@@ -12,7 +12,7 @@ project ("NDIReceiver")
   
 
 # Add source to this project's executable.
-add_executable (NDI-console "main.cpp" "ReceiverAsync.cpp" "ReceiverAsync.h")
+add_executable(NDI-console "main.cpp" "ReceiverAsync.cpp" "ReceiverAsync.h")
 target_link_libraries(NDI-console NDIReceiver-lib ${CONAN_LIBS} ${NDI-LIBS})
 
 add_custom_command(TARGET NDI-console POST_BUILD
